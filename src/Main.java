@@ -2,8 +2,8 @@
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        int start = 5;
-        int end = 40;
+        int start = 2;
+        int end = 30;
 
 
         if (args.length != 1) {
@@ -11,7 +11,7 @@ public class Main {
                     Usage: ParallelMonteCarloPi <num_threads>.
                     Without arguments, a loop of %d to %d threads will be launched
                     """, start, end);
-            for (int i = start; i <= end; i+=5) {
+            for (int i = start; i <= end; i += 2) {
                 ParallelMonteCarloPi.getPiWithTime(Integer.toString(i));
             }
             return;
