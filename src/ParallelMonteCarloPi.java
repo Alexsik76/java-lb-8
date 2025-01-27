@@ -13,12 +13,9 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class ParallelMonteCarloPi {
 
-
-
-
         public static void getPiWithTime(String arg) throws InterruptedException {
             int numThreads = 1;
-            long iterations = 100_000_000;
+            long iterations = 1_000_000_000;
             try {
                 numThreads = Integer.parseInt(arg.trim());
             } catch (NumberFormatException e) {
@@ -46,12 +43,10 @@ public class ParallelMonteCarloPi {
 
         }
 
-
         private static double getPi(int numThreads, long iterations) throws InterruptedException {
             ExecutorService executor;
-
             AtomicLong pointsInsideCircle = new AtomicLong(0);
-            Random random = new Random();
+
 
             try {
                 executor = Executors.newFixedThreadPool(numThreads);
@@ -60,29 +55,27 @@ public class ParallelMonteCarloPi {
             }
 
             for (int i = 0; i < numThreads; i++) {
-                executor.execute(() -> {
-                    long localCount = 0;
-                    for (long j = 0; j < iterations / numThreads; j++) {
-                        double x = random.nextDouble();
-                        double y = random.nextDouble();
-                        if (Math.sqrt(x * x + y * y) <= 1) {
-                            localCount++;
-                        }
-                    }
-                    pointsInsideCircle.addAndGet(localCount);
-                });
+                long iters = iterations / numThreads;
+                executor.execute(() -> test_points(iters, pointsInsideCircle));
             }
 
-                executor.shutdown();
-
-            try {
-                executor.awaitTermination(1, TimeUnit.HOURS);
-            } catch (InterruptedException e) {
-                System.err.println(e.getMessage());
-                throw new InterruptedException("InterruptedException");
-            }
+            executor.shutdown();
+            executor.awaitTermination(1, TimeUnit.HOURS);
             return 4.0 * pointsInsideCircle.get() / iterations;
 
+        }
+
+        private static void test_points(long iters, AtomicLong points){
+            Random random = new Random();
+            long localCount = 0;
+            for (long j = 0; j < iters; j++) {
+                double x = random.nextDouble();
+                double y = random.nextDouble();
+                if (Math.sqrt(x * x + y * y) <= 1) {
+                    localCount++;
+                }
+            }
+            points.addAndGet(localCount);
         }
 
         }

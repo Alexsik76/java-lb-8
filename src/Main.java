@@ -3,7 +3,7 @@
 public class Main {
     public static void main(String[] args) throws InterruptedException {
         int start = 5;
-        int end = 20;
+        int end = 40;
 
 
         if (args.length != 1) {
