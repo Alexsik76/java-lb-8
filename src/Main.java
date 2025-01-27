@@ -2,13 +2,22 @@
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
+        int start = 5;
+        int end = 20;
+
+
         if (args.length != 1) {
-            System.out.println("Usage: ParallelMonteCarloPi <num_threads>");
+            System.out.printf("""
+                    Usage: ParallelMonteCarloPi <num_threads>.
+                    Without arguments, a loop of %d to %d threads will be launched
+                    """, start, end);
+            for (int i = start; i <= end; i+=5) {
+                ParallelMonteCarloPi.getPiWithTime(Integer.toString(i));
+            }
             return;
         }
 
-        ParallelMonteCarloPi new_run = new ParallelMonteCarloPi(args[0]);
+        ParallelMonteCarloPi.getPiWithTime(args[0]);
     }
+
 }
